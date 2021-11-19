@@ -5,14 +5,20 @@ const Player = require('../models/player')
 
 router.get('/game/scoreboard',async(req,res)=>{
     try{
-        const response =res.body
-        console.log(res.body)
+        console.log(res.body,"Wenas")
         const player = await Player.find().sort({score:-1}).limit(10).catch((error)=>{
             console.log("Get positions",error)
             throw new Error("Existing user")
         })
+        const players = []
+        player.forEach((item,index)=>{
+            players.push({
+                ...item._doc,
+                position:index+1
+            })
+        })
         res.status(200).send({
-            data:{player},
+            data:{player:players},
             status:true,
             message:"Correct Verify" 
         }) 
